@@ -1,0 +1,9 @@
+/dist.ini
+/MANIFEST.SKIP
+/Log-Log4perl-Shortcuts-*
+/tmp
+!*/tmp
+*~
+*.swp
+*.swo
+weaver.ini
