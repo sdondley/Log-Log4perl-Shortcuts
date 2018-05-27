@@ -1,1 +1,140 @@
-Initial commit
+# NAME
+
+Log::Log4perl::Shortcuts - shortcut functions to make log4perl even easier
+
+# VERSION
+
+version 0.001
+
+# OVERVIEW
+
+Provides shortcut functions to frequently used Log4perl methods.
+
+# SYNOPSIS
+
+Instead of this:
+
+    use Log::Log4perl;
+
+    sub do_something {
+      my $logger = Log::Log4perl->get_logger('my.category');
+
+      $log->info('I am doing something.');
+    }
+
+Save some keystrokes and do this:
+
+    use Log::Log4perl;
+    use Log::Log4perl::Shortcuts qw(:all);
+
+    sub do_something {
+      logw('I am doing something.', 'my.category');
+    }
+
+# DESCRIPTION
+
+This modules provides shortcut functions for each log level corresponding
+to the level you wish the log message to be seen plus additional special shortcut
+functions.
+
+## Log level functions
+
+Below are the six log level functions, one for each of the standard log levels provided
+by the Log4perl module. Each of them accepts an argument for the log message
+plus an optional category argument. 
+
+The **$category** arguments, if supplied, are appended to the name of the calling
+package where the log command was invoked. For example, if `logi('Info log entry', 'my_category')`
+is called from package `Foo::Bar`, the log entry will be made with the category:
+
+    Foo::Bar.my_category
+
+# FUNCTIONS
+
+## logt($msg, \[$category\])
+
+Prints a message to the _trace_ logger when the log level is set to **TRACE** or above. 
+
+## logd($msg, \[$category\])
+
+Print messages when the log level is set to **DEBUG** or above. **$category**
+argument is optional.
+
+**$msg** is intended to be a scalar variable or reference to a data structure which
+will be output as a message after getting passed through [Data::Dumper](https://metacpan.org/pod/Data::Dumper).
+
+## logi($msg, \[$category\])
+
+Prints a message to the _info_ logger when the log level is set to **INFO** or above. 
+
+## logw($msg, \[$category\])
+
+Prints a message to the _warn_ logger when the log level is set to **WARN** or above. 
+
+## loge($msg, \[$category\])
+
+Prints a message to the _error_ logger when the log level is set to **ERROR** or above. 
+
+## logf($msg, \[$category\])
+
+Prints a message to the _fatal_ logger when the log level is set to **FATAL** or above. 
+
+## logc(\[$category\])
+
+Prints call stack when log level is set to **TRACE** or above. Note that no
+message argument is used by this function.
+
+\#=head1 CONFIGURATION AND ENVIRONMENT
+\#
+\#{{$name}} requires no configuration files or environment variables.
+
+# DEPENDENCIES
+
+# SUPPORT
+
+## Perldoc
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc Log::Log4perl::Shortcuts
+
+## Websites
+
+The following websites have more information about this module, and may be of help to you. As always,
+in addition to those websites please use your favorite search engine to discover more resources.
+
+- MetaCPAN
+
+    A modern, open-source CPAN search engine, useful to view POD in HTML format.
+
+    [https://metacpan.org/release/Log-Log4perl-Shortcuts](https://metacpan.org/release/Log-Log4perl-Shortcuts)
+
+## Source Code
+
+The code is open to the world, and available for you to hack on. Please feel free to browse it and play
+with it, or whatever. If you want to contribute patches, please send me a diff or prod me to pull
+from your repository :)
+
+[https://github.com/sdondley/Log-Log4perl-Shortcuts](https://github.com/sdondley/Log-Log4perl-Shortcuts)
+
+    git clone git://github.com/sdondley/Log-Log4perl-Shortcuts.git
+
+# BUGS AND LIMITATIONS
+
+You can make new bug reports, and view existing ones, through the
+web interface at [http://github.com/sdondley/Log-Log4perl-Shortcuts/issues](http://github.com/sdondley/Log-Log4perl-Shortcuts/issues).
+
+# INSTALLATION
+
+See perlmodinstall for information and options on installing Perl modules.
+
+# AUTHOR
+
+Steve Dondley <s@dondley.com>
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2018 by Steve Dondley.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
