@@ -135,7 +135,7 @@ __END__
 
 =head1 OVERVIEW
 
-Provides shortcut functions to frequently used Log4perl methods.
+Provides an easy-to-use wrapper for L<Log::Log4perl>.
 
 =head1 SYNOPSIS
 
@@ -149,9 +149,8 @@ Instead of this:
     $log->info('I am doing something.');
   }
 
-Save some keystrokes and do this:
+You can save some keystrokes and do this:
 
-  use Log::Log4perl;
   use Log::Log4perl::Shortcuts qw(:all);
 
   sub do_something {
@@ -160,14 +159,12 @@ Save some keystrokes and do this:
 
 =head1 DESCRIPTION
 
-This modules provides shortcut functions for each log level corresponding
-to the level you wish the log message to be seen plus additional special shortcut
-functions.
-  
+This modules provides shortcut functions for the standard log levels provided by L<Log::Log4perl>
+plus some additional functionality to make it more convenient.
 
 =head2 Log level functions
 
-Below are the six log level functions, one for each of the standard log levels provided
+There are the six log level functions provided, one for each of the standard log levels provided
 by the Log4perl module. Each of them accepts an argument for the log message
 plus an optional category argument. 
 
@@ -205,17 +202,22 @@ Prints a message to the I<error> logger when the log level is set to B<ERROR> or
 
 Prints a message to the I<fatal> logger when the log level is set to B<FATAL> or above. 
 
-=head2 Special function
+=head2 Special functions
 
 =func logc([$category])
 
 Prints call stack when log level is set to B<TRACE> or above. Note that no
 message argument is used by this function.
 
+=func change_config_file($filename)
 
-#=head1 CONFIGURATION AND ENVIRONMENT
-#
-#{{$name}} requires no configuration files or environment variables.
+Changes the log configuration file which must be placed in the C<~/perl/log_config> directory.
+
+
+=head1 CONFIGURATION AND ENVIRONMENT
+
+Place any custom log configuration files you'd like to use in C<~/perl/log_config> and use the 
+C<change_config_file> function to switch to it.
 
 
 =head1 DEPENDENCIES
