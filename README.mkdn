@@ -4,11 +4,11 @@ Log::Log4perl::Shortcuts - shortcut functions to make log4perl even easier
 
 # VERSION
 
-version 0.001
+version 0.002
 
 # OVERVIEW
 
-Provides shortcut functions to frequently used Log4perl methods.
+Provides an easy-to-use wrapper for [Log::Log4perl](https://metacpan.org/pod/Log::Log4perl).
 
 # SYNOPSIS
 
@@ -22,9 +22,8 @@ Instead of this:
       $log->info('I am doing something.');
     }
 
-Save some keystrokes and do this:
+You can save some keystrokes and do this:
 
-    use Log::Log4perl;
     use Log::Log4perl::Shortcuts qw(:all);
 
     sub do_something {
@@ -33,13 +32,12 @@ Save some keystrokes and do this:
 
 # DESCRIPTION
 
-This modules provides shortcut functions for each log level corresponding
-to the level you wish the log message to be seen plus additional special shortcut
-functions.
+This modules provides shortcut functions for the standard log levels provided by [Log::Log4perl](https://metacpan.org/pod/Log::Log4perl)
+plus some additional functionality to make it more convenient.
 
 ## Log level functions
 
-Below are the six log level functions, one for each of the standard log levels provided
+There are the six log level functions provided, one for each of the standard log levels provided
 by the Log4perl module. Each of them accepts an argument for the log message
 plus an optional category argument. 
 
@@ -84,9 +82,14 @@ Prints a message to the _fatal_ logger when the log level is set to **FATAL** or
 Prints call stack when log level is set to **TRACE** or above. Note that no
 message argument is used by this function.
 
-\#=head1 CONFIGURATION AND ENVIRONMENT
-\#
-\#{{$name}} requires no configuration files or environment variables.
+## change\_config\_file($filename)
+
+Changes the log configuration file which must be placed in the `~/perl/log_config` directory.
+
+# CONFIGURATION AND ENVIRONMENT
+
+Place any custom log configuration files you'd like to use in `~/perl/log_config` and use the 
+`change_config_file` function to switch to it.
 
 # DEPENDENCIES
 
