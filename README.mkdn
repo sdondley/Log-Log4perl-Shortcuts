@@ -4,7 +4,7 @@ Log::Log4perl::Shortcuts - shortcut functions to make log4perl even easier
 
 # VERSION
 
-version 0.004
+version 0.005
 
 # OVERVIEW
 
@@ -47,7 +47,7 @@ is called from package `Foo::Bar`, the log entry will be made with the category:
 
     Foo::Bar.my_category
 
-# FUNCTIONS
+# Functions
 
 ## logt ($msg, \[$category\])
 
@@ -76,6 +76,8 @@ Prints a message to the _error_ logger when the log level is set to **ERROR** or
 ## logf ($msg, \[$category\])
 
 Prints a message to the _fatal_ logger when the log level is set to **FATAL** or above. 
+
+# Special Functions
 
 ## logc (\[$category\])
 
