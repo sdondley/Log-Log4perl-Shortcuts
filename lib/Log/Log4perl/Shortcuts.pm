@@ -174,11 +174,11 @@ is called from package C<Foo::Bar>, the log entry will be made with the category
 
   Foo::Bar.my_category
 
-=func logt($msg, [$category])
+=func logt ($msg, [$category])
 
 Prints a message to the I<trace> logger when the log level is set to B<TRACE> or above. 
 
-=func logd($msg, [$category])
+=func logd ($msg, [$category])
 
 Print messages when the log level is set to B<DEBUG> or above. B<$category>
 argument is optional.
@@ -186,30 +186,30 @@ argument is optional.
 B<$msg> is intended to be a scalar variable or reference to a data structure which
 will be output as a message after getting passed through L<Data::Dumper>.
 
-=func logi($msg, [$category])
+=func logi ($msg, [$category])
 
 Prints a message to the I<info> logger when the log level is set to B<INFO> or above. 
 
-=func logw($msg, [$category])
+=func logw ($msg, [$category])
 
 Prints a message to the I<warn> logger when the log level is set to B<WARN> or above. 
 
-=func loge($msg, [$category])
+=func loge ($msg, [$category])
 
 Prints a message to the I<error> logger when the log level is set to B<ERROR> or above. 
 
-=func logf($msg, [$category])
+=func logf ($msg, [$category])
 
 Prints a message to the I<fatal> logger when the log level is set to B<FATAL> or above. 
 
 =head2 Special functions
 
-=func logc([$category])
+=func logc ([$category])
 
 Prints call stack when log level is set to B<TRACE> or above. Note that no
 message argument is used by this function.
 
-=func change_config_file($filename)
+=func change_config_file ($filename)
 
 Changes the log configuration file which must be placed in the C<~/perl/log_config> directory.
 
