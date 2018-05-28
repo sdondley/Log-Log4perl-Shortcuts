@@ -204,12 +204,12 @@ Prints a message to the I<fatal> logger when the log level is set to B<FATAL> or
 
 =head2 Special functions
 
-=func logc ([$category])
+=spec_func logc ([$category])
 
 Prints call stack when log level is set to B<TRACE> or above. Note that no
 message argument is used by this function.
 
-=func change_config_file ($filename)
+=spec_func change_config_file ($filename)
 
 Changes the log configuration file which must be placed in the C<~/perl/log_config> directory.
 
