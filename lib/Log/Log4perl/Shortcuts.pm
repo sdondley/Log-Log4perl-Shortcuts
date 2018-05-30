@@ -28,7 +28,7 @@ BEGIN {
 
 sub change_config_file {
   $current_config = shift;
-  my $file = File::HomeDir->my_home . $config_dir . $current_config;
+  my $file = $home_dir . $config_dir . $current_config;
   if (!-f $file) { 
     carp ("Configuration file $file does not exist. Configuration file unchanged.");
   } else {
