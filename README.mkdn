@@ -4,7 +4,7 @@ Log::Log4perl::Shortcuts - shortcut functions to make log4perl even easier
 
 # VERSION
 
-version 0.006
+version 0.007
 
 # OVERVIEW
 
