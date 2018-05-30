@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+- Fixed config file test so it works on other systems
 
 0.006     2018-05-28 06:39:15-04:00 America/New_York
 
