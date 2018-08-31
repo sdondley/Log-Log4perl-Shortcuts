@@ -4,7 +4,7 @@ Log::Log4perl::Shortcuts - shortcut functions to make log4perl even easier
 
 # VERSION
 
-version 0.007
+version 0.008
 
 # OVERVIEW
 
@@ -39,7 +39,7 @@ plus some additional functionality to make it more convenient.
 
 There are the six log level functions provided, one for each of the standard log levels provided
 by the Log4perl module. Each of them accepts an argument for the log message
-plus an optional category argument. 
+plus an optional category argument.
 
 The **$category** arguments, if supplied, are appended to the name of the calling
 package where the log command was invoked. For example, if `logi('Info log entry', 'my_category')`
@@ -51,7 +51,7 @@ is called from package `Foo::Bar`, the log entry will be made with the category:
 
 ## logt ($msg, \[$category\])
 
-Prints a message to the _trace_ logger when the log level is set to **TRACE** or above. 
+Prints a message to the _trace_ logger when the log level is set to **TRACE** or above.
 
 ## logd ($msg, \[$category\])
 
@@ -63,19 +63,19 @@ will be output as a message after getting passed through [Data::Dumper](https://
 
 ## logi ($msg, \[$category\])
 
-Prints a message to the _info_ logger when the log level is set to **INFO** or above. 
+Prints a message to the _info_ logger when the log level is set to **INFO** or above.
 
 ## logw ($msg, \[$category\])
 
-Prints a message to the _warn_ logger when the log level is set to **WARN** or above. 
+Prints a message to the _warn_ logger when the log level is set to **WARN** or above.
 
 ## loge ($msg, \[$category\])
 
-Prints a message to the _error_ logger when the log level is set to **ERROR** or above. 
+Prints a message to the _error_ logger when the log level is set to **ERROR** or above.
 
 ## logf ($msg, \[$category\])
 
-Prints a message to the _fatal_ logger when the log level is set to **FATAL** or above. 
+Prints a message to the _fatal_ logger when the log level is set to **FATAL** or above.
 
 # Special Functions
 
@@ -88,9 +88,13 @@ message argument is used by this function.
 
 Changes the log configuration file which must be placed in the `~/perl/log_config` directory.
 
+## set\_log\_level ($log\_level)
+
+Change the log level. Should be one of 'trace', 'debug', 'info', 'warn', 'error', or 'fatal'.
+
 # CONFIGURATION AND ENVIRONMENT
 
-Place any custom log configuration files you'd like to use in `~/perl/log_config` and use the 
+Place any custom log configuration files you'd like to use in `~/perl/log_config` and use the
 `change_config_file` function to switch to it.
 
 # REQUIRES
@@ -100,6 +104,7 @@ Place any custom log configuration files you'd like to use in `~/perl/log_config
 - [Exporter](https://metacpan.org/pod/Exporter)
 - [File::HomeDir](https://metacpan.org/pod/File::HomeDir)
 - [Log::Log4perl](https://metacpan.org/pod/Log::Log4perl)
+- [Log::Log4perl::Level](https://metacpan.org/pod/Log::Log4perl::Level)
 
 # SUPPORT
 
