@@ -5,6 +5,7 @@ use Test::Fatal;
 use Data::Dumper;
 use Test::Exception;
 use Test::NoWarnings;
+use Test::Output;
 use lib '/Users/stevedondley/perl/modules/Log-Log4perl-Shortcuts/lib';
 use Log::Log4perl::Shortcuts qw(:all);
 diag( "Running my tests" );
@@ -13,11 +14,9 @@ diag( "Running my tests" );
 
 
 
-
-my $tests = 1; # keep on line 17 for ,i (increment and ,d (decrement)
+my $tests = 3; # keep on line 17 for ,i (increment and ,d (decrement)
 
 plan tests => $tests;
-logt('tracing');
+stderr_like( sub { logt('tracing') }, qr/\[TRACE\]/, 'prints a trace message');
 set_log_level('debug');
-logt('tracing');
-logt('skdfj', 'cat');
+stderr_is( sub { logt('tracing') }, '', 'does not print a trace message');
