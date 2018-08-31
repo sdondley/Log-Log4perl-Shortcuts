@@ -2,26 +2,29 @@ package Log::Log4perl::Shortcuts ;
 
 use Carp;
 use Log::Log4perl;
+use Log::Log4perl::Level;
 use File::HomeDir;
 use Data::Dumper qw(Dumper);
 
 require Exporter;
 @ISA = Exporter;
-@EXPORT_OK = qw(logc logt logd logi logw loge logf change_config_file);
-%EXPORT_TAGS = ( all => [qw(logc logt logd logi logw loge logf change_config_file)] );
+@EXPORT_OK = qw(logc logt logd logi logw loge logf change_config_file set_log_level);
+%EXPORT_TAGS = ( all => [qw(logc logt logd logi logw loge logf change_config_file set_log_level)] );
 Exporter::export_ok_tags('all');
 
-BEGIN { 
+BEGIN {
   our $config_dir = '/perl/log_config/';
   our $current_config = 'default2.cfg';
   our $home_dir = File::HomeDir->my_home;
   my $file = $home_dir . $config_dir . $current_config;
-  if (!-f $file) { 
+  if (!-f $file) {
     Log::Log4perl->init_once('config/default.cfg');
   } else {
     Log::Log4perl->init_once($file);
   }
 };
+
+my $log_level = $TRACE;
 
 
 ### Public methods ###
@@ -29,12 +32,17 @@ BEGIN {
 sub change_config_file {
   $current_config = shift;
   my $file = $home_dir . $config_dir . $current_config;
-  if (!-f $file) { 
+  if (!-f $file) {
     carp ("Configuration file $file does not exist. Configuration file unchanged.");
   } else {
     Log::Log4perl->init($file);
     return 'success';
   }
+}
+
+sub set_log_level {
+  my $level = ${uc(shift)};
+  $log_level = $level;
 }
 
 sub logc {
@@ -81,7 +89,7 @@ sub logw {
   my $log = _get_logger(shift);;
   return unless $log->is_warn;
 
-  $log->warn($msg);
+  $log->logwarn($msg);
 }
 
 sub loge {
@@ -95,7 +103,7 @@ sub loge {
   chomp $msg;
   chomp $msg;
 
-  $log->error($msg);
+  $log->error_warn($msg);
 }
 
 sub logf {
@@ -104,15 +112,22 @@ sub logf {
   my $log = _get_logger(shift);;
   return unless $log->is_fatal;
 
-  $log->fatal($msg);
-  die "\n";
-}
+  $msg = sprintf("%-80s %s\n", $msg, [caller(0)]->[0] . ": " . [caller(0)]->[2]);
+  $msg .= '        ' . _get_callers();
+  chomp $msg;
+  chomp $msg;
 
+  $log->logdie($msg);
+}
 ### Private methods ###
 sub _get_logger {
   my $category = shift || '';
-  return Log::Log4perl->get_logger((caller(1))[0] . ($category ? '.' . $category : '') );
+  my $logger = Log::Log4perl->get_logger((caller(1))[0] . ($category ? '.' . $category : '') );
+  $logger->level($log_level);
+  return $logger;
 }
+
+
 
 sub _get_callers {
   my @callers = ();
@@ -166,7 +181,7 @@ plus some additional functionality to make it more convenient.
 
 There are the six log level functions provided, one for each of the standard log levels provided
 by the Log4perl module. Each of them accepts an argument for the log message
-plus an optional category argument. 
+plus an optional category argument.
 
 The B<$category> arguments, if supplied, are appended to the name of the calling
 package where the log command was invoked. For example, if C<logi('Info log entry', 'my_category')>
@@ -176,7 +191,7 @@ is called from package C<Foo::Bar>, the log entry will be made with the category
 
 =func logt ($msg, [$category])
 
-Prints a message to the I<trace> logger when the log level is set to B<TRACE> or above. 
+Prints a message to the I<trace> logger when the log level is set to B<TRACE> or above.
 
 =func logd ($msg, [$category])
 
@@ -188,19 +203,19 @@ will be output as a message after getting passed through L<Data::Dumper>.
 
 =func logi ($msg, [$category])
 
-Prints a message to the I<info> logger when the log level is set to B<INFO> or above. 
+Prints a message to the I<info> logger when the log level is set to B<INFO> or above.
 
 =func logw ($msg, [$category])
 
-Prints a message to the I<warn> logger when the log level is set to B<WARN> or above. 
+Prints a message to the I<warn> logger when the log level is set to B<WARN> or above.
 
 =func loge ($msg, [$category])
 
-Prints a message to the I<error> logger when the log level is set to B<ERROR> or above. 
+Prints a message to the I<error> logger when the log level is set to B<ERROR> or above.
 
 =func logf ($msg, [$category])
 
-Prints a message to the I<fatal> logger when the log level is set to B<FATAL> or above. 
+Prints a message to the I<fatal> logger when the log level is set to B<FATAL> or above.
 
 =head2 Special functions
 
@@ -213,10 +228,13 @@ message argument is used by this function.
 
 Changes the log configuration file which must be placed in the C<~/perl/log_config> directory.
 
+=spec_func set_log_level ($log_level)
+
+Change the log level. Should be one of 'trace', 'debug', 'info', 'warn', 'error', or 'fatal'.
 
 =head1 CONFIGURATION AND ENVIRONMENT
 
-Place any custom log configuration files you'd like to use in C<~/perl/log_config> and use the 
+Place any custom log configuration files you'd like to use in C<~/perl/log_config> and use the
 C<change_config_file> function to switch to it.
 
 

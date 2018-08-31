@@ -63,7 +63,6 @@ sub error {
 
 package Logger;
 use Log::Log4perl::Shortcuts qw(:all);
-use Moose;
 
 sub trace {
   logt('I am a trace message.');
@@ -92,4 +91,3 @@ sub fatal {
 sub error {
   loge('I am an error message.');
 }
-
