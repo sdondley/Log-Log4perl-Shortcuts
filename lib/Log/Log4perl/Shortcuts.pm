@@ -1,5 +1,6 @@
 package Log::Log4perl::Shortcuts ;
 
+use 5.10.0;
 use Carp;
 use Log::Log4perl;
 use Log::Log4perl::Level;
