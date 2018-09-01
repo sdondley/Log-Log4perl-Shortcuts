@@ -4,7 +4,7 @@ Log::Log4perl::Shortcuts - shortcut functions to make log4perl even easier
 
 # VERSION
 
-version 0.009
+version 0.010
 
 # OVERVIEW
 
@@ -102,9 +102,11 @@ Place any custom log configuration files you'd like to use in `~/perl/log_config
 - [Carp](https://metacpan.org/pod/Carp)
 - [Data::Dumper](https://metacpan.org/pod/Data::Dumper)
 - [Exporter](https://metacpan.org/pod/Exporter)
-- [File::HomeDir](https://metacpan.org/pod/File::HomeDir)
+- [File::UserConfig](https://metacpan.org/pod/File::UserConfig)
 - [Log::Log4perl](https://metacpan.org/pod/Log::Log4perl)
 - [Log::Log4perl::Level](https://metacpan.org/pod/Log::Log4perl::Level)
+- [Module::Data](https://metacpan.org/pod/Module::Data)
+- [Path::Tiny](https://metacpan.org/pod/Path::Tiny)
 
 # SUPPORT
 
@@ -138,7 +140,7 @@ from your repository :)
 # BUGS AND LIMITATIONS
 
 You can make new bug reports, and view existing ones, through the
-web interface at [http://github.com/sdondley/Log-Log4perl-Shortcuts/issues](http://github.com/sdondley/Log-Log4perl-Shortcuts/issues).
+web interface at [https://github.com/sdondley/Log-Log4perl-Shortcuts/issues](https://github.com/sdondley/Log-Log4perl-Shortcuts/issues).
 
 # INSTALLATION
 
