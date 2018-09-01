@@ -26,8 +26,6 @@ my $config_dir = $config->configdir;
 my $file_abs         = path($config_dir, 'config', $file)->canonpath;
 my $default       = path($config_dir, 'config', 'default.cfg')->canonpath;
 print $default;
-print "\n";
-print $file;
 copy ($default, $file_abs);
 
 ok ( change_config_file($file) == 'success', 'config file changed');
