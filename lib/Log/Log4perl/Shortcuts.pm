@@ -4,6 +4,8 @@ use 5.10.0;
 use Carp;
 use Log::Log4perl;
 use Log::Log4perl::Level;
+use Path::Tiny;
+use Module::Data;
 use File::HomeDir;
 use Data::Dumper qw(Dumper);
 
@@ -17,11 +19,13 @@ BEGIN {
   our $config_dir = '/perl/log_config/';
   our $current_config = 'default2.cfg';
   our $home_dir = File::HomeDir->my_home;
-  my $file = $home_dir . $config_dir . $current_config;
-  if (!-f $file) {
-    Log::Log4perl->init_once('config/default.cfg');
+  my $path = path($home_dir, $config_dir, $current_config);
+  if (!$path->exists) {
+    my $mod = Module::Data->new('Log::Log4perl::Shortcuts');
+    $path = path($mod->root->parent, 'config/default.cfg');
+    Log::Log4perl->init_once($path->canonpath);
   } else {
-    Log::Log4perl->init_once($file);
+    Log::Log4perl->init_once($path->canonpath);
   }
 };
 
@@ -32,11 +36,11 @@ my $log_level = $TRACE;
 
 sub change_config_file {
   $current_config = shift;
-  my $file = $home_dir . $config_dir . $current_config;
-  if (!-f $file) {
-    carp ("Configuration file $file does not exist. Configuration file unchanged.");
+  my $path = path($home_dir, $config_dir, $current_config);
+  if ($path->exists) {
+    carp ("Configuration file $path->canonpath does not exist. Configuration file unchanged.");
   } else {
-    Log::Log4perl->init($file);
+    Log::Log4perl->init($path->canonpath);
     return 'success';
   }
 }
