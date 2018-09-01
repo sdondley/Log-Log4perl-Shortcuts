@@ -6,7 +6,7 @@ use Log::Log4perl;
 use Log::Log4perl::Level;
 use Path::Tiny;
 use Module::Data;
-use File::HomeDir;
+use File::UserConfig;
 use Data::Dumper qw(Dumper);
 
 require Exporter;
@@ -15,30 +15,29 @@ require Exporter;
 %EXPORT_TAGS = ( all => [qw(logc logt logd logi logw loge logf change_config_file set_log_level)] );
 Exporter::export_ok_tags('all');
 
-BEGIN {
-  our $config_dir = '/perl/log_config/';
-  our $current_config = 'default2.cfg';
-  our $home_dir = File::HomeDir->my_home;
-  my $path = path($home_dir, $config_dir, $current_config);
-  if (!$path->exists) {
-    my $mod = Module::Data->new('Log::Log4perl::Shortcuts');
-    $path = path($mod->root->parent, 'config/default.cfg');
-    Log::Log4perl->init_once($path->canonpath);
-  } else {
-    Log::Log4perl->init_once($path->canonpath);
-  }
-};
+my $package = __PACKAGE__;
+$package =~ s/::/-/g;
+my $config_dir = path(File::UserConfig->new(dist => $package)->configdir, 'config');
+
+my $default_config_file = path($config_dir, 'default.cfg');
+
+if (!$default_config_file->exists) {
+  carp ("Unable to load default Log::Log4perl::Shortcuts configuration file. Aborting");
+} else {
+  Log::Log4perl->init_once($default_config_file->canonpath);
+}
 
 my $log_level = $TRACE;
-
 
 ### Public methods ###
 
 sub change_config_file {
-  $current_config = shift;
-  my $path = path($home_dir, $config_dir, $current_config);
-  if ($path->exists) {
-    carp ("Configuration file $path->canonpath does not exist. Configuration file unchanged.");
+  my $new_config = shift;
+
+  my $path = path($config_dir, $new_config);
+  if (!$path->is_file) {
+    carp ("Configuration file $path->canonpath does not exist. Configuration file unchanged."
+      . " Place your custom log configuration file in $config_dir.");
   } else {
     Log::Log4perl->init($path->canonpath);
     return 'success';
