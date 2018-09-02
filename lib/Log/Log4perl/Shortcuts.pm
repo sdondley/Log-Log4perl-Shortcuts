@@ -20,7 +20,6 @@ $package =~ s/::/-/g;
 my $config_dir = path(File::UserConfig->new(dist => $package)->configdir, 'log_config');
 
 my $default_config_file = path($config_dir, 'default.cfg');
-print Dumper $default_config_file;
 
 if (!$default_config_file->exists) {
   carp ("Unable to load default Log::Log4perl::Shortcuts configuration file. Aborting");
