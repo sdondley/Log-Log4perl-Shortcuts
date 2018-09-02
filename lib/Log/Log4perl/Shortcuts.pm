@@ -11,15 +11,16 @@ use Data::Dumper qw(Dumper);
 
 require Exporter;
 @ISA = Exporter;
-@EXPORT_OK = qw(logc logt logd logi logw loge logf change_config_file set_log_level);
-%EXPORT_TAGS = ( all => [qw(logc logt logd logi logw loge logf change_config_file set_log_level)] );
+@EXPORT_OK = qw(logc logt logd logi logw loge logf set_log_config set_log_level);
+%EXPORT_TAGS = ( all => [qw(logc logt logd logi logw loge logf set_log_config set_log_level)] );
 Exporter::export_ok_tags('all');
 
 my $package = __PACKAGE__;
 $package =~ s/::/-/g;
-my $config_dir = path(File::UserConfig->new(dist => $package)->configdir, 'config');
+my $config_dir = path(File::UserConfig->new(dist => $package)->configdir, 'log_config');
 
 my $default_config_file = path($config_dir, 'default.cfg');
+print Dumper $default_config_file;
 
 if (!$default_config_file->exists) {
   carp ("Unable to load default Log::Log4perl::Shortcuts configuration file. Aborting");
@@ -31,13 +32,22 @@ my $log_level = $TRACE;
 
 ### Public methods ###
 
-sub change_config_file {
+sub set_log_config {
   my $new_config = shift;
+  my $module = shift;
 
-  my $path = path($config_dir, $new_config);
+  my $temp_config_dir;
+  if ($module) {
+    $module =~ s/::/-/g;
+    $temp_config_dir = path(File::UserConfig->new(dist => $module)->configdir, 'log_config');
+  } else {
+    $temp_config_dir = $config_dir;
+  }
+
+  my $path = path($temp_config_dir, $new_config);
+
   if (!$path->is_file) {
-    carp ("Configuration file $path->canonpath does not exist. Configuration file unchanged."
-      . " Place your custom log configuration file in $config_dir.");
+    carp ("Configuration file $path->canonpath does not exist. Configuration file unchanged.");
   } else {
     Log::Log4perl->init($path->canonpath);
     return 'success';
@@ -228,7 +238,7 @@ Prints a message to the I<fatal> logger when the log level is set to B<FATAL> or
 Prints call stack when log level is set to B<TRACE> or above. Note that no
 message argument is used by this function.
 
-=spec_func change_config_file ($filename)
+=spec_func set_log_config ($filename)
 
 Changes the log configuration file which must be placed in the C<~/perl/log_config> directory.
 
@@ -239,7 +249,7 @@ Change the log level. Should be one of 'trace', 'debug', 'info', 'warn', 'error'
 =head1 CONFIGURATION AND ENVIRONMENT
 
 Place any custom log configuration files you'd like to use in C<~/perl/log_config> and use the
-C<change_config_file> function to switch to it.
+C<set_log_config> function to switch to it.
 
 
 =head1 DEPENDENCIES
