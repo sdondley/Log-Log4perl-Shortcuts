@@ -108,26 +108,42 @@ sub logw {
 sub loge {
   my $msg = shift;
 
-  my $log = _get_logger(shift);;
+  my $log = '';
+  my $options = {};
+  my $next_arg = shift;
+  if (ref $next_arg) {
+    my $options = shift;
+  } else {
+    $log = _get_logger($next_arg);;
+  }
+
   return unless $log->is_error;
 
-  $msg = sprintf("%-80s %s\n", $msg, [caller(0)]->[0] . ": " . [caller(0)]->[2]);
-  $msg .= '        ' . _get_callers();
-  chomp $msg;
-  chomp $msg;
-
+  $msg = sprintf("%-80s %s\n", $msg, [caller(0)]->[0] . ": line " . [caller(0)]->[2]);
+  if ($options->{show_callers}) {
+    $msg .= '        ' . _get_callers();
+    chomp $msg;
+    chomp $msg;
+  }
   $log->error_warn($msg);
 }
 
 sub logf {
   my $msg = shift;
-  my $show_callers = shift;
 
-  my $log = _get_logger(shift);;
+  my $log = '';
+  my $options = {};
+  my $next_arg = shift;
+  if (ref $next_arg) {
+    my $options = shift;
+  } else {
+    $log = _get_logger($next_arg);;
+  }
+
   return unless $log->is_fatal;
 
-  $msg = sprintf("%-80s %s\n", $msg, [caller(0)]->[0] . ": " . [caller(0)]->[2]);
-  if ($show_callers) {
+  $msg = sprintf("%-80s %s\n", $msg, [caller(0)]->[0] . ": line " . [caller(0)]->[2]);
+  if ($options->{show_callers}) {
     $msg .= '        ' . _get_callers();
     chomp $msg;
     chomp $msg;
@@ -203,6 +219,10 @@ The B<$category> arguments, if supplied, are appended to the name of the calling
 package where the log command was invoked. For example, if C<logi('Info log entry', 'my_category')>
 is called from package C<Foo::Bar>, the log entry will be made with the category:
 
+The B<$options> arguments, if avaiable, supply addition options to the C<loge>
+and C<logf> functions. If C< { show_callers =E<gt> 1 } > is supplied, a stack trace
+will be printed out below the error or fatal message.
+
   Foo::Bar.my_category
 
 =func logt ($msg, [$category])
@@ -225,11 +245,11 @@ Prints a message to the I<info> logger when the log level is set to B<INFO> or a
 
 Prints a message to the I<warn> logger when the log level is set to B<WARN> or above.
 
-=func loge ($msg, [$category])
+=func loge ($msg, [$category], [{ $options => value, ... }])
 
 Prints a message to the I<error> logger when the log level is set to B<ERROR> or above.
 
-=func logf ($msg, [$category])
+=func logf ($msg, [$category], [{ $options => value, ... }])
 
 Prints a message to the I<fatal> logger when the log level is set to B<FATAL> or above.
 
