@@ -121,14 +121,17 @@ sub loge {
 
 sub logf {
   my $msg = shift;
+  my $show_callers = shift;
 
   my $log = _get_logger(shift);;
   return unless $log->is_fatal;
 
   $msg = sprintf("%-80s %s\n", $msg, [caller(0)]->[0] . ": " . [caller(0)]->[2]);
-  $msg .= '        ' . _get_callers();
-  chomp $msg;
-  chomp $msg;
+  if ($show_callers) {
+    $msg .= '        ' . _get_callers();
+    chomp $msg;
+    chomp $msg;
+  }
 
   $log->logdie($msg);
 }
