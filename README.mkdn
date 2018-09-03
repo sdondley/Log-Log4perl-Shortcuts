@@ -4,7 +4,7 @@ Log::Log4perl::Shortcuts - shortcut functions to make log4perl even easier
 
 # VERSION
 
-version 0.010
+version 0.011
 
 # OVERVIEW
 
@@ -45,6 +45,10 @@ The **$category** arguments, if supplied, are appended to the name of the callin
 package where the log command was invoked. For example, if `logi('Info log entry', 'my_category')`
 is called from package `Foo::Bar`, the log entry will be made with the category:
 
+The **$options** arguments, if avaiable, supply addition options to the `loge`
+and `logf` functions. If ` { show_callers => 1 } ` is supplied, a stack trace
+will be printed out below the error or fatal message.
+
     Foo::Bar.my_category
 
 # Functions
@@ -69,11 +73,11 @@ Prints a message to the _info_ logger when the log level is set to **INFO** or a
 
 Prints a message to the _warn_ logger when the log level is set to **WARN** or above.
 
-## loge ($msg, \[$category\])
+## loge ($msg, \[$category\], \[{ $options => value, ... }\])
 
 Prints a message to the _error_ logger when the log level is set to **ERROR** or above.
 
-## logf ($msg, \[$category\])
+## logf ($msg, \[$category\], \[{ $options => value, ... }\])
 
 Prints a message to the _fatal_ logger when the log level is set to **FATAL** or above.
 
@@ -84,7 +88,7 @@ Prints a message to the _fatal_ logger when the log level is set to **FATAL** or
 Prints call stack when log level is set to **TRACE** or above. Note that no
 message argument is used by this function.
 
-## change\_config\_file ($filename)
+## set\_log\_config ($filename)
 
 Changes the log configuration file which must be placed in the `~/perl/log_config` directory.
 
@@ -95,7 +99,7 @@ Change the log level. Should be one of 'trace', 'debug', 'info', 'warn', 'error'
 # CONFIGURATION AND ENVIRONMENT
 
 Place any custom log configuration files you'd like to use in `~/perl/log_config` and use the
-`change_config_file` function to switch to it.
+`set_log_config` function to switch to it.
 
 # REQUIRES
 
