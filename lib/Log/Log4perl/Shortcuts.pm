@@ -17,7 +17,7 @@ Exporter::export_ok_tags('all');
 
 my $package = __PACKAGE__;
 $package =~ s/::/-/g;
-my $config_dir = path(File::UserConfig->new(dist => $package)->configdir, 'log_config');
+my $config_dir = path(File::UserConfig->new(dist => $package)->sharedir, 'log_config');
 
 my $default_config_file = path($config_dir, 'default.cfg');
 
@@ -33,24 +33,54 @@ my $log_level = $TRACE;
 
 sub set_log_config {
   my $new_config = shift;
-  my $module = shift;
+  my $module = shift || '';
 
+  # must pass in name of a file
+  if (!$new_config) {
+    logw('No log config file passed. Configuration file unchanged');
+    return;
+  }
+
+  # try to get config file from path passed directly in
+  my $cf_path = path($new_config);
+  if ($cf_path->exists) {
+    return _init_config($cf_path);
+  }
+
+  # try to get the config from the module argument or pkg of caller
+  if (!$module) {
+    ($module) = caller;
+  }
+  $module =~ s/::/-/g;
   my $temp_config_dir;
-  if ($module) {
-    $module =~ s/::/-/g;
-    $temp_config_dir = path(File::UserConfig->new(dist => $module)->configdir, 'log_config');
-  } else {
-    $temp_config_dir = $config_dir;
+  eval {
+    my $share_dir = File::UserConfig->new(dist => $module)->sharedir;
+    if ($share_dir) {
+      $temp_config_dir = path(File::UserConfig->new(dist => $module)->sharedir, 'log_config');
+    }
+  };
+  if ($temp_config_dir) {
+    my $path = path($temp_config_dir, $new_config);
+    if ($path->exists) {
+      return _init_config($cf_path);
+    }
   }
 
-  my $path = path($temp_config_dir, $new_config);
+  # Lastly, check the Log::Log4perl::Shortcuts module for config file
+  $temp_config_dir = $config_dir;
+  $path = path($temp_config_dir, $new_config);
 
-  if (!$path->is_file) {
-    carp ("Configuration file $path->canonpath does not exist. Configuration file unchanged.");
+  if (! $path->exists) {
+    carp ("Configuration file $new_config does not exist. Configuration file unchanged.");
   } else {
-    Log::Log4perl->init($path->canonpath);
-    return 'success';
+    return _init_config($cf_path);
   }
+}
+
+sub _init_config {
+  my $config = shift;
+  Log::Log4perl->init($config->canonpath);
+  return 'success';
 }
 
 sub set_log_level {
