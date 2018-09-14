@@ -17,9 +17,7 @@ diag( "Running my tests" );
 
 
 
-my $tests = 3; # keep on line 17 for ,i (increment and ,d (decrement)
+my $tests = 2; # keep on line 17 for ,i (increment and ,d (decrement)
 
 plan tests => $tests;
-stderr_like( sub { logt('tracing') }, qr/\[TRACE\]/, 'prints a trace message');
-set_log_level('debug');
-stderr_is( sub { logt('tracing') }, '', 'does not print a trace message');
+lives_ok { get_log_config(); } 'can get log level';
