@@ -34,7 +34,7 @@ my $log_level = $TRACE;
 ### Public methods ###
 
 sub get_log_config {
-
+  return $config_file;
 }
 
 sub set_log_config {

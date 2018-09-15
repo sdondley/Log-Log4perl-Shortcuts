@@ -1,4 +1,6 @@
-Revision history for Log-Log4perl-Shortcuts
+Revision history for {{$dist->name}}
+
+{{$NEXT}}
 
 0.016     2018-09-13 22:09:11-04:00 America/New_York
 
