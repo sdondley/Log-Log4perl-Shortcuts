@@ -5,7 +5,6 @@ use Carp;
 use Log::Log4perl;
 use Log::Log4perl::Level;
 use File::Spec;
-use Module::Data;
 use File::UserConfig;
 use Data::Dumper qw(Dumper);
 
