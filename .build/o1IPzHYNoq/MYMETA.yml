@@ -1,0 +1,48 @@
+---
+abstract: 'shortcut functions to make log4perl even easier'
+author:
+  - 'Steve Dondley <s@dondley.com>'
+build_requires:
+  ExtUtils::MakeMaker: '0'
+  File::Copy: '0'
+  File::HomeDir: '0'
+  File::Temp: '0'
+  File::UserConfig: '0'
+  Path::Tiny: '0'
+  Test::Exception: '0'
+  Test::Fatal: '0'
+  Test::File::ShareDir::Dist: '0'
+  Test::File::ShareDir::Module: '0'
+  Test::More: '0'
+  Test::NoWarnings: '0'
+  Test::Output: '0'
+  Test::Warn: '0'
+  lib: '0'
+  strict: '0'
+  warnings: '0'
+configure_requires:
+  ExtUtils::MakeMaker: '0'
+  File::ShareDir::Install: '0.06'
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 6.012, CPAN::Meta::Converter version 2.150005'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: '1.4'
+name: Log-Log4perl-Shortcuts
+requires:
+  Carp: '0'
+  Data::Dumper: '0'
+  Exporter: '0'
+  File::Spec: '0'
+  File::UserConfig: '0'
+  Log::Log4perl: '<= 1.47'
+  Log::Log4perl::Level: '0'
+  Module::Data: '0'
+  perl: '5.010000'
+resources:
+  bugtracker: https://github.com/sdondley/Log-Log4perl-Shortcuts/issues
+  repository: git://github.com/sdondley/Log-Log4perl-Shortcuts.git
+version: '0.022'
+x_generated_by_perl: v5.24.4
+x_serialization_backend: 'CPAN::Meta::YAML version 0.018'

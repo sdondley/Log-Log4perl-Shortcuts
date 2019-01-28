@@ -1,8 +1,6 @@
-Revision history for {{$dist->name}}
+Revision history for Log-Log4perl-Shortcuts
 
-{{$NEXT}}
-
-	- Eliminate Path::Tiny dependency
+0.022     2019-01-28 15:06:15-05:00 America/New_York
 
 0.021     2018-09-15 14:09:10-04:00 America/New_York
 

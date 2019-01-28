@@ -1,5 +1,5 @@
 package Log::Log4perl::Shortcuts ;
-
+$Log::Log4perl::Shortcuts::VERSION = '0.022';
 use 5.10.0;
 use Carp;
 use Log::Log4perl;
@@ -22,11 +22,11 @@ my $config_dir = File::Spec->catfile(File::UserConfig->new(dist => $package)->sh
 
 my $default_config_file = File::Spec->catfile($config_dir, 'default.cfg');
 
-if (!-e $default_config_file) {
+if (!$default_config_file->exists) {
   carp ("Unable to load default Log::Log4perl::Shortcuts configuration file. Aborting");
 } else {
-  Log::Log4perl->init_once(File::Spec->canonpath($default_config_file));
-  $config_file = File::Spec->canonpath($default_config_file);
+  Log::Log4perl->init_once($default_config_file->canonpath);
+  $config_file = $default_config_file->canonpath;
 }
 
 my $log_level = $TRACE;
@@ -49,7 +49,7 @@ sub set_log_config {
 
   # try to get config file from path passed directly in
   my $cf_path = File::Spec->catfile($new_config);
-  if (-e $cf_path) {
+  if ($cf_path->exists) {
     return _init_config($cf_path);
   }
 
@@ -67,7 +67,7 @@ sub set_log_config {
   };
   if ($temp_config_dir) {
     $cf_path = File::Spec->catfile($temp_config_dir, $new_config);
-    if (-e $cf_path) {
+    if ($cf_path->exists) {
       return _init_config($cf_path);
     }
   }
@@ -76,7 +76,7 @@ sub set_log_config {
   $temp_config_dir = $config_dir;
   $cf_path = File::Spec->catfile($temp_config_dir, $new_config);
 
-  if (!-e $cf_path) {
+  if (! $cf_path->exists) {
     carp ("Configuration file $new_config does not exist. Configuration file unchanged.");
   } else {
     return _init_config($cf_path);
@@ -85,8 +85,8 @@ sub set_log_config {
 
 sub _init_config {
   my $config = shift;
-  Log::Log4perl->init(File::Spec->canonpath($config));
-  $config_file = File::Spec->canonpath($config);
+  Log::Log4perl->init($config->canonpath);
+  $config_file = $config->canonpath;
   return 'success';
 }
 
@@ -217,6 +217,16 @@ sub _get_callers {
 
 __END__
 
+=pod
+
+=head1 NAME
+
+Log::Log4perl::Shortcuts - shortcut functions to make log4perl even easier
+
+=head1 VERSION
+
+version 0.022
+
 =head1 OVERVIEW
 
 Provides an easy-to-use wrapper for L<Log::Log4perl>.
@@ -265,11 +275,13 @@ will be printed out below the error or fatal message.
 
   Foo::Bar.my_category
 
-=func logt ($msg, [$category])
+=head1 Functions
+
+=head2 logt ($msg, [$category])
 
 Prints a message to the I<trace> logger when the log level is set to B<TRACE> or above.
 
-=func logd ($msg, [$category])
+=head2 logd ($msg, [$category])
 
 Print messages when the log level is set to B<DEBUG> or above. B<$category>
 argument is optional.
@@ -277,30 +289,30 @@ argument is optional.
 B<$msg> is intended to be a scalar variable or reference to a data structure which
 will be output as a message after getting passed through L<Data::Dumper>.
 
-=func logi ($msg, [$category])
+=head2 logi ($msg, [$category])
 
 Prints a message to the I<info> logger when the log level is set to B<INFO> or above.
 
-=func logw ($msg, [$category])
+=head2 logw ($msg, [$category])
 
 Prints a message to the I<warn> logger when the log level is set to B<WARN> or above.
 
-=func loge ($msg, [$category], [{ $options => value, ... }])
+=head2 loge ($msg, [$category], [{ $options => value, ... }])
 
 Prints a message to the I<error> logger when the log level is set to B<ERROR> or above.
 
-=func logf ($msg, [$category], [{ $options => value, ... }])
+=head2 logf ($msg, [$category], [{ $options => value, ... }])
 
 Prints a message to the I<fatal> logger when the log level is set to B<FATAL> or above.
 
-=head2 Special functions
+=head1 Special Functions
 
-=spec_func logc ([$category])
+=head2 logc ([$category])
 
 Prints call stack when log level is set to B<TRACE> or above. Note that no
 message argument is used by this function.
 
-=spec_func set_log_config ($file, ['MODULE::NAME'])
+=head2 set_log_config ($file, ['MODULE::NAME'])
 
 Changes the log configuration file to the path and/or
 file name specified with C<$file>.
@@ -317,7 +329,7 @@ You can also supply the name of another module installed on your system which
 has its logs located in a C<log_config> directory within that module's shared
 directory.
 
-=spec_func set_log_level ($log_level)
+=head2 set_log_level ($log_level)
 
 Change the log level. Should be one of 'trace', 'debug', 'info', 'warn', 'error',
 or 'fatal'.
@@ -338,17 +350,83 @@ path to the custom log file when calling the C<set_log_config> function or place
 your custom log configuration files in the C<Log-Log4perl-Shortcuts/log_config>
 directory found in your home directory.
 
-=head1 DEPENDENCIES
+=head1 REQUIRES
 
-=head1 AUTHOR NOTES
+=over 4
 
-=head2 Development status
+=item * L<Carp|Carp>
 
-This module is currently in the beta stages and is actively supported and maintained.
-Suggestion for improvement are welcome.
+=item * L<Data::Dumper|Data::Dumper>
 
-=head2 Motivation
+=item * L<Exporter|Exporter>
 
-Provide motivation for writing the module here.
+=item * L<File::Spec|File::Spec>
 
-#=head1 SEE ALSO
+=item * L<File::UserConfig|File::UserConfig>
+
+=item * L<Log::Log4perl|Log::Log4perl>
+
+=item * L<Log::Log4perl::Level|Log::Log4perl::Level>
+
+=item * L<Module::Data|Module::Data>
+
+=back
+
+=for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders metacpan
+
+=head1 SUPPORT
+
+=head2 Perldoc
+
+You can find documentation for this module with the perldoc command.
+
+  perldoc Log::Log4perl::Shortcuts
+
+=head2 Websites
+
+The following websites have more information about this module, and may be of help to you. As always,
+in addition to those websites please use your favorite search engine to discover more resources.
+
+=over 4
+
+=item *
+
+MetaCPAN
+
+A modern, open-source CPAN search engine, useful to view POD in HTML format.
+
+L<https://metacpan.org/release/Log-Log4perl-Shortcuts>
+
+=back
+
+=head2 Source Code
+
+The code is open to the world, and available for you to hack on. Please feel free to browse it and play
+with it, or whatever. If you want to contribute patches, please send me a diff or prod me to pull
+from your repository :)
+
+L<https://github.com/sdondley/Log-Log4perl-Shortcuts>
+
+  git clone git://github.com/sdondley/Log-Log4perl-Shortcuts.git
+
+=head1 BUGS AND LIMITATIONS
+
+You can make new bug reports, and view existing ones, through the
+web interface at L<https://github.com/sdondley/Log-Log4perl-Shortcuts/issues>.
+
+=head1 INSTALLATION
+
+See perlmodinstall for information and options on installing Perl modules.
+
+=head1 AUTHOR
+
+Steve Dondley <s@dondley.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2018 by Steve Dondley.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
