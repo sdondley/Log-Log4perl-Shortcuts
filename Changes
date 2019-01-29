@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+	- Add Dist::Zilla files to distro
+
 0.022     2019-01-28 15:18:27-05:00 America/New_York
 
 	- Eliminate Path::Tiny dependency
